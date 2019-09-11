@@ -11,4 +11,4 @@ def operators(A, atomics):
     if A[0] == '~':
         return operators(A[1],atomics) + 1
 
-print(operators(A,atomics))
+print("Number of logical operators:",operators(A,atomics))
