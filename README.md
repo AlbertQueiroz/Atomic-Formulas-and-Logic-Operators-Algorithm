@@ -1,1 +1,1 @@
-##Atomic Formulas and Logic Operators Algorithm
+# Atomic Formulas and Logic Operators Algorithm
