@@ -14,4 +14,5 @@ def subformulas(F,atomics):
         print(F)
         return F[1] + subformulas(F[1],atomics)
 
+print("Subformulas")
 subformulas(F,atomics)

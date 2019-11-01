@@ -1,6 +1,6 @@
 atomicos = ['a','b','c','d','e','f','g','h']
 
-A = []
+A = [['t','^',['~','x']],'>','a']
 
 def conectivos(A, atomicos):
     if A in atomicos:
