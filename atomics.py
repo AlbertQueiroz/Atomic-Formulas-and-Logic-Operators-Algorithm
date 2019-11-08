@@ -13,13 +13,10 @@ def atomicsQnt(A, atomics, rep=[]):
     if (A[0] == '~'):
         return atomicsQnt(A[1], atomics)
 
-def atomicas(A, atomics, rep = []):
-    if (A in atomics and A not in rep):
-        rep+=A
-        return A
-    if(A in atomics and A in rep):
-        return ''
-    if (type(A[1]) == str and A[1] not in atomics):
-        return atomicas(A[0], atomics) + atomicas(A[2],atomics)
-    if (A[0] == '~'):
-        return atomicas(A[1], atomics)
+def atomicas(A):
+    if (len(A) == 1):
+        return [A[0]]
+    if (len(A)==3):
+        return atomicas(A[0]) + atomicas(A[2])
+    if (len(A)==2):
+        return atomicas(A[1])

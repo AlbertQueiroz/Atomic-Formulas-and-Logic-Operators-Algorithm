@@ -1,40 +1,45 @@
-from truthTable import truthTable
-from atomics import atomicsQnt
 from atomics import atomicas
 from valuation import valuation
 
-atomics = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','x','y','z']
+mainAtomics = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','x','y','z']
 
-A = [['p','^','q'],'|=',['~','a']]
+premises = [[[['c'], ['^'], [['~'], ['g']]], ['=>'], ['m']], ['c'], [['~'], ['m']]]
+formula = ['g']
 
-Ax = [['p','^','q'],'|=',['p','^','q']]
+#premises = [[['p'], ['=>'], [['q'], ['=>'], ['r']]]]
+#formula = [['p'], ['=>'], [['r'], ['=>'], ['q']]]
 
-#Defining the number of atomics of the formula
-numberOfAtomics = atomicsQnt(A, atomics)
 
-#Defining the truth table based on the number of atomics
-table = truthTable(numberOfAtomics)
 
-#Separating all the formula atomics
-atomicsOfA = []
-for char in atomicas(A, atomics):
-    atomicsOfA += char
+def consequence(premises, formula):
+    Atomics = atomicas(formula)
+    for premise in premises:
+        Atomics = Atomics + atomicas(premise)
+    interpretation = {}
+    return consequenceTable(premises, formula, Atomics, interpretation)
 
-#Testes the logical consequence and returns a boolean value
-def consequence(A, truthTable, atomicsOfA, atomicsQnt):
-    print(A)
-    values = {}
-    aux = True
-    for row in range(2**numberOfAtomics): #For all interpretations
-        for col in range(numberOfAtomics): #For each atomic
-            values[atomicsOfA[col]] = truthTable[col][row] #Setting the value of the atomic for each interpretation
-        if A[1] == '|=': #If the formula is a consequence
-            if valuation(A[0], atomicsOfA, values) and valuation(A[2], atomicsOfA, values) != True: #If exists some interpretation where the premises valuation are true and the consequence dont
-                aux = False
-        else: #If the formula isn't a consequence
-            aux = False
-    return aux
+def consequenceTable(premises, formula, Atomics , interpretation):
+    if (len(Atomics)==0):
+        if (valuation(formula, interpretation)):
+            return True
+        premiseValue = True
+        for premise in premises:
+            premiseValue = premiseValue and valuation(premise, interpretation)
+        if premiseValue:
+            return False
+        return True
+    #Grandes chances de dar bucho abaixo
+    atomic = Atomics[0]
+    Atomics = Atomics[1:]
+    interpretation1 = {
+        atomic: True
+    }
+    interpretation1.update(interpretation)
 
-#Testing the logical consequences
-print(consequence(A, table, atomicsOfA, atomicsQnt))
-print(consequence(Ax, table, atomicsOfA, atomicsQnt))
+    interpretation2 = {
+        atomic:False
+    }
+    interpretation2.update(interpretation)
+    return consequenceTable(premises, formula, Atomics, interpretation1) and consequenceTable(premises, formula, Atomics, interpretation2)
+
+print(consequence(premises, formula))
